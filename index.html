@@ -35,12 +35,12 @@
       padding: 16px;
     }
 
-    /* Floating hearts background */
+    /* Floating hearts */
     .heart {
       position: fixed;
       bottom: -40px;
       font-size: 20px;
-      animation: floatUp linear infinite;
+      animation: floatUp linear forwards;
       opacity: 0.7;
       pointer-events: none;
     }
@@ -91,10 +91,6 @@
       100% { transform: translateY(0); }
     }
 
-    .blush circle {
-      fill: #ff9bb8 !important;
-    }
-
     h1 {
       font-size: clamp(26px, 4vw, 44px);
       margin: 12px 0 18px;
@@ -139,9 +135,10 @@
 
     .hint {
       margin-top: 10px;
-      font-size: 13px;
-      opacity: .7;
-      min-height: 20px;
+      font-size: 14px;
+      opacity: .85;
+      min-height: 22px;
+      transition: opacity 0.3s ease;
     }
 
     .result {
@@ -167,10 +164,15 @@
   <canvas id="confettiCanvas"></canvas>
 
   <main class="card">
-    <!-- Cute animal SVG -->
-    <svg id="animal" class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="160" cy="130" r="8" />
-      <circle cx="220" cy="130" r="8" />
+
+    <!-- Simple cute face -->
+    <svg id="animal" class="art" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="60" fill="#f2a97b" />
+      <circle cx="75" cy="90" r="6" />
+      <circle cx="125" cy="90" r="6" />
+      <circle id="blush1" cx="65" cy="110" r="8" fill="transparent" />
+      <circle id="blush2" cx="135" cy="110" r="8" fill="transparent" />
+      <path d="M85 120 Q100 135 115 120" stroke="#000" stroke-width="3" fill="none" />
     </svg>
 
     <h1>Yogitha will you be my valentine? 💖</h1>
@@ -180,7 +182,7 @@
       <button id="noBtn">No</button>
     </section>
 
-    <div class="hint" id="hint"></div>
+    <div class="hint" id="hint">Try catching No 😏</div>
 
     <section class="result" id="result">
       <h2>YAY! 🎉</h2>
@@ -197,8 +199,10 @@
     const loveText = document.getElementById("loveText");
     const music = document.getElementById("bgMusic");
     const animal = document.getElementById("animal");
+    const blush1 = document.getElementById("blush1");
+    const blush2 = document.getElementById("blush2");
 
-    /* Floating hearts generator */
+    /* Floating hearts */
     setInterval(() => {
       const heart = document.createElement("div");
       heart.className = "heart";
@@ -207,7 +211,7 @@
       heart.style.animationDuration = 4 + Math.random() * 4 + "s";
       document.body.appendChild(heart);
       setTimeout(() => heart.remove(), 8000);
-    }, 400);
+    }, 500);
 
     /* Funny NO messages */
     const messages = [
@@ -246,7 +250,7 @@
       hint.textContent = messages[msgIndex % messages.length];
       msgIndex++;
 
-      yesBtn.style.transform = `translateY(-50%) scale(${1 + msgIndex * 0.08})`;
+      yesBtn.style.transform = `translateY(-50%) scale(${1 + msgIndex * 0.1})`;
     }
 
     zone.addEventListener("pointermove", e => {
@@ -274,18 +278,18 @@
     function celebrate() {
       const end = Date.now() + 1500;
       (function frame() {
-        confettiInstance({ particleCount: 8, spread: 80, origin: { x: Math.random(), y: Math.random() * 0.4 } });
+        confettiInstance({ particleCount: 10, spread: 80, origin: { x: Math.random(), y: Math.random() * 0.4 } });
         if (Date.now() < end) requestAnimationFrame(frame);
       })();
     }
 
-    /* Typewriter love letter */
-    const message = `From the moment I met you...\nlife became more beautiful.\n\nEvery smile of yours is my favorite place.\n\nWill you stay with me forever? 💖`;
+    /* Typewriter */
+    const message = `From the moment I met you...\nLife became more beautiful.\n\nEvery smile of yours is my favorite place.\n\nWill you stay with me forever? 💖`;
 
-    function typeWriter(text, i = 0) {
-      if (i < text.length) {
-        loveText.textContent += text.charAt(i);
-        setTimeout(() => typeWriter(text, i + 1), 35);
+    function typeWriter(i = 0) {
+      if (i < message.length) {
+        loveText.textContent += message.charAt(i);
+        setTimeout(() => typeWriter(i + 1), 35);
       }
     }
 
@@ -296,11 +300,14 @@
       result.style.display = "block";
 
       animal.classList.add("jump");
+      blush1.setAttribute("fill", "#ff9bb8");
+      blush2.setAttribute("fill", "#ff9bb8");
+
       celebrate();
 
       try { await music.play(); } catch {}
 
-      typeWriter(message);
+      typeWriter();
     });
   </script>
 </body>
