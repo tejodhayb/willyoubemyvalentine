@@ -239,6 +239,13 @@
       overflow: hidden;
     }
 
+    .love-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     .photo-frame::after {
       content: "💞";
       position: absolute;
@@ -377,9 +384,9 @@
           <h2 class="result-title">YAY! 🎉</h2>
           <div class="result-subtitle">You said yes — my heart is dancing</div>
         </div>
-        <video class="love-video" controls autoplay muted loop playsinline>
-          <source src="https://drive.google.com/uc?export=download&id=1EKLUg9c99m8HJb-hlgxpHEgICdaiKmBx" type="video/mp4">
-        </video>
+        <div class="photo-frame">
+          <img class="love-photo" src="PXL_20250604_032833777.jpg" alt="Us together" />
+        </div>
         <div class="love-badges">
           <span class="badge">Best Day Ever</span>
           <span class="badge">Forever Us</span>
