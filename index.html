@@ -461,11 +461,19 @@
       yesBtn.style.transform = `translateY(-50%) scale(${1 + msgIndex * 0.1})`;
     }
 
-    zone.addEventListener("pointermove", e => {
+    function handlePointerMove(e) {
       const b = noBtn.getBoundingClientRect();
       const d = Math.hypot((b.left + b.width / 2) - e.clientX, (b.top + b.height / 2) - e.clientY);
       if (d < 140) moveNo(e.clientX, e.clientY);
-    });
+    }
+
+    zone.addEventListener("pointermove", handlePointerMove);
+
+    // On touch screens, move the button on tap/press so it can't be clicked.
+    noBtn.addEventListener("pointerdown", e => {
+      moveNo(e.clientX, e.clientY);
+      e.preventDefault();
+    }, { passive: false });
 
     noBtn.addEventListener("click", e => e.preventDefault());
 
